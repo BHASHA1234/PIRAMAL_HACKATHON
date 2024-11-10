@@ -1,0 +1,80 @@
+Introduction
+In this competition, the objective is to build a predictive model to determine probabilities associated with loan applications. The dataset comprises primary and secondary train and test data, with some features potentially being time-dependent.
+
+Data Loading and Preprocessing
+Data Loading:
+
+Loaded primary training data (train_1.csv) and primary test data (test_1.csv).
+Loaded secondary training data (train_2_1.csv, train_2_2.csv) and secondary test data (test_2_1.csv, test_2_2.csv).
+Data Merging:
+
+Renamed the columns of secondary datasets to indicate the time period (_t1 for time period 1 and _t2 for time period 2).
+Merged the primary data with the corresponding secondary data on the id column using a left join.
+Combining Datasets:
+
+Added a dataset column to distinguish between training and test data.
+Concatenated the train and test datasets to ensure consistent preprocessing.
+Handling Missing Values:
+
+Identified columns with more than 80% missing values and dropped them from the dataset.
+Used SimpleImputer to impute missing values:
+Numerical columns were imputed using the median strategy.
+Categorical columns were imputed using the most frequent strategy.
+Feature Engineering
+Categorical Encoding:
+
+Identified categorical columns and encoded them using LabelEncoder.
+Creating Time-Based Difference Features:
+
+For common columns available in both time periods (_t1 and _t2), calculated the difference between the two periods and created new features with the _diff suffix.
+Scaling Features:
+
+Applied StandardScaler to scale numerical features for consistent magnitude.
+Clustering:
+
+Used KMeans clustering to create a new feature cluster:
+Fitted the KMeans model on the training data (excluding any existing cluster column).
+Predicted cluster labels for both training and test data.
+Model Training and Evaluation
+Data Splitting:
+
+Split the combined dataset back into training and test sets based on the dataset column.
+Further split the training data into training and validation sets using train_test_split with stratification on the target variable to maintain class balance.
+Models Used:
+
+LightGBM:
+Trained a LightGBM model with specified parameters and evaluated using AUC-ROC.
+Validation AUC-ROC Score: (Placeholder for actual score)
+XGBoost:
+Trained an XGBoost model using DMatrix and early stopping.
+Validation AUC-ROC Score: (Placeholder for actual score)
+CatBoost:
+Trained a CatBoost model with early stopping and default depth.
+Validation AUC-ROC Score: (Placeholder for actual score)
+Model Selection:
+
+Chose the XGBoost model for final predictions based on the highest validation AUC-ROC score.
+Prediction and Submission:
+
+Used the trained XGBoost model to predict probabilities on the test data.
+Created a submission.csv file containing loan_id and predicted probabilities (prob).
+Ensured that the submission file contains the correct number of entries and the required columns.
+Tools and Libraries Used
+Programming Language: Python
+Data Manipulation: pandas, numpy
+Data Visualization: matplotlib, seaborn
+Machine Learning Models:
+LightGBM: lightgbm
+XGBoost: xgboost
+CatBoost: catboost
+Data Preprocessing:
+Imputers: sklearn.impute.SimpleImputer
+Label Encoding: sklearn.preprocessing.LabelEncoder
+Feature Scaling: sklearn.preprocessing.StandardScaler
+Model Evaluation:
+Metrics: sklearn.metrics.roc_auc_score
+Model Selection: sklearn.model_selection.train_test_split
+Clustering:
+KMeans: sklearn.cluster.KMeans
+Conclusion
+By comprehensive data preprocessing, feature engineering, and experimenting with different machine learning models, the XGBoost model was selected for its superior performance in predicting loan probabilities. The approach focused on handling missing data effectively, creating meaningful features (including time-based differences and clustering), and ensuring robust model evaluation through proper train-test splits and validation techniques.
